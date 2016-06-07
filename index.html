@@ -32,6 +32,9 @@
         display: inline-block;
       }
       /* results */
+      .results {
+        display: none;
+      }
       .overall-conversion {
         font-size: 20px;
         font-weight: bold;
@@ -49,7 +52,6 @@
       }
       .event-group-title {
         font-size: 18px;
-        display: none;
       }
       .event .label {
         width: 20%;
@@ -120,8 +122,8 @@
           
           // run JQL query
           MP.api.jql(script, params).done(function(results) {
-            // unhide titles if hidden
-            $('.event-group-title').show();
+            // unhide results if hidden
+            $('.results').show();
             // add data to report
             addMainConversion(event1, event2, results[0]['Overall Conversion']);
             addEventGroup($('#best-events'), 'Best', results[0]['Best Events']);
