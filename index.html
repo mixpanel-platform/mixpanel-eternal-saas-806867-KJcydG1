@@ -36,6 +36,11 @@
         // grab JQL query
         var script = $.trim($('#jql').html());
         
+        // format dates for JQL query ('2016-05-01' format)
+        function dateToString(d) {
+          return new Date(d).toISOString().split('T')[0];
+        }
+        
         function runQuery(dates, event1, event2) {
           console.log(dates, event1, event2);
           console.log('running');
@@ -44,8 +49,8 @@
           
           // set up JQL params
           var params = {
-            from_date: dates.from,
-            to_date: dates.to,
+            from_date: dateToString(dates.from),
+            to_date: dateToString(dates.to),
             steps: [event1, event2]
           }
           
@@ -59,12 +64,14 @@
         }
         
         function addMainConversion(event1, event2, data) {
+          // add overall conversion data
           var $conv = $('.overall-conversion');
           $conv.find('.title').text(event1 + ' to ' + event2 + ' Conversion');
           $conv.find('.conversion').text(data);
         }
         
         function addEventGroup($div, groupType, data) {
+          // add conversion rates for each event in group
           var $table = $div.find('.event-group-table');
           _.each(data, function(conversion, eventName) {
             $('<div class="event">' + 
