@@ -28,7 +28,7 @@
       .input {
         display: inline-block;
       }
-      .dropdown-label, .dropdown {
+      .dropdown-label, .dropdown, #event1, #event2 {
         display: inline-block;
       }
       /* results */
@@ -58,6 +58,9 @@
       .event .event-name {
         width: 30%;
         display: inline-block;
+      }
+      .cell {
+        padding: 3px;
       }
     </style>
     
@@ -105,8 +108,6 @@
         }
         
         function runQuery(dates, event1, event2) {
-          console.log(dates, event1, event2);
-          console.log('running');
           // run query only if first and second event are defined
           if (!event1 || !event2) return;
           
@@ -143,10 +144,10 @@
           // add conversion rates for each event in group to table
           _.each(data, function(conversion, eventName) {
             $('<div class="event">' + 
-                '<div class="label">When users completed</div>' + 
-                '<div class="event-name">' + eventName + '</div>' +
-                '<div class="label">conversion rate was</div>' +
-                '<div class="conversion">' + conversion + '%</div>' +
+                '<div class="cell label">When users completed</div>' + 
+                '<div class="cell event-name">' + eventName + '</div>' +
+                '<div class="cell label">conversion rate was</div>' +
+                '<div class="cell conversion">' + conversion + '%</div>' +
               '</div>')
               .appendTo($table);
           });
