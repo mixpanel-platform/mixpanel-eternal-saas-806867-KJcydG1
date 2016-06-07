@@ -25,12 +25,20 @@
       .inputs {
         margin-bottom: 20px;
       }
-      .input {
+      .input-section {
         display: inline-block;
+      }
+      .input {
+        position: relative;
       }
       .dropdown-label, .dropdown, #event1, #event2 {
         display: inline-block;
       }
+      #event1, #event2 {
+        position: absolute;
+        left: 100px;
+      }
+      
       /* results */
       .results {
         display: none;
@@ -67,17 +75,21 @@
     </style>
     
     <div class="inputs">
-      <div class="input">
-        <div class="dropdown-label">Start Event:</div>
-        <div class="dropdown" id="event1"></div>
+      <div class="input-section">
+        <div class="input">
+          <div class="dropdown-label">Start Event:</div>
+          <div class="dropdown" id="event1"></div>
+        </div>
+        <div class="input">
+          <div class="dropdown-label">Conversion Event:</div>
+          <div class="dropdown" id="event2"></div>
+        </div>
       </div>
-      <div class="input">
-        <div class="dropdown-label">Conversion Event:</div>
-        <div class="dropdown" id="event2"></div>
-      </div>
-      <div class="input">
-        <div class="dropdown-label">Date Range:</div>
-        <div class="dropdown" id="dates"></div>
+      <div class="input-section">
+        <div class="input">
+          <div class="dropdown-label">Date Range:</div>
+          <div class="dropdown" id="dates"></div>
+        </div>
       </div>
     </div>
     <div class="results">
