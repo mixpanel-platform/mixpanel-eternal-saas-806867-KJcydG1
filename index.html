@@ -7,9 +7,142 @@
     <script src="https://cdn.mxpnl.com/libs/mixpanel-platform/build/mixpanel-platform.v0.latest.min.js"></script>
   </head>
   <body class="mixpanel-platform-body">
-    <h1>Hello, World!</h1>
+    <div class="inputs">
+      <div id="dates"></div>
+      <div id="event1"></div>
+      <div id="event2"></div>
+    </div>
+    <div class="results">
+      <div class="overall-conversion">
+        <div class="title"></div>
+        <div class="conversion main-conversion"></div>
+      </div>
+      <div class="event-group" id="best-events">
+        <div class="event-group-title">Best Events</div>
+        <div class="event-group-table"></div>
+      </div>
+      <div class="event-group" id="worst-events">
+        <div class="event-group-title">Worst Events</div>
+        <div class="event-group-table"></div>
+      </div>
+    </div>
     <script>
-      // Run queries and display results here
+      $(document).ready(function() {
+        // initialize dropdowns
+        $('#dates').MPDatepicker();
+        $('#event1').MPEventSelect();
+        $('#event2').MPEventSelect();
+        
+        // grab JQL query
+        var script = $.trim($('#jql').html());
+        
+        function runQuery(dates, event1, event2) {
+          console.log(dates, event1, event2);
+          console.log('running');
+          // run query only if first and second event are defined
+          if (!event1 || !event2) return;
+          
+          // set up JQL params
+          var params = {
+            from_date: dates.from,
+            to_date: dates.to,
+            steps: [event1, event2]
+          }
+          
+          // run JQL query
+          MP.api.JQL(script, params).done(function(results) {
+            console.log(results);
+            addMainConversion(event1, event2, results[0]['Overall Conversion']);
+            addEventGroup($('#best-events'), 'Best', results[0]['Best Events']);
+            addEventGroup($('#worst-events'), 'Worst', results[0]['Worst Events']);
+          });
+        }
+        
+        function addMainConversion(event1, event2, data) {
+          var $conv = $('.overall-conversion');
+          $conv.find('.title').text(event1 + ' to ' + event2 + ' Conversion');
+          $conv.find('.conversion').text(data);
+        }
+        
+        function addEventGroup($div, groupType, data) {
+          var $table = $div.find('.event-group-table');
+          _.each(data, function(conversion, eventName) {
+            $('<div class="event">' + 
+                '<div class="label">When users completed</div>' + 
+                '<div class="event-name">' + eventName + '</div>' +
+                '<div class="label">conversion rate was</div>' +
+                '<div class="conversion">' + conversion + '</div>' +
+              '</div>')
+              .appendTo($table);
+          });
+        }
+        
+        // run query when dropdowns are changed
+        $('#dates, #event1, #event2').on('change', function() {
+          var dates = $('#dates').val();
+          var event1 = $('#event1').val();
+          var event2 = $('#event2').val();
+          runQuery(dates, event1, event2);
+        });
+        
+      });
+    </script>
+    <script type="text/jql" id="jql">
+      var steps = params.steps;
+      var amount_returned = 5;
+      function main() {
+        return Events({
+          from_date: params.from_date,
+          to_date:   params.to_date
+        })
+        .groupByUser(function(state, events){
+          var result = state || {start:0, complete:0, events:{}};
+          _.each(events, function(event) { 
+            if (event.name == steps[0] && result.start === 0){
+              result.start = 1;
+              _.each(result.events, function(output, key){
+                result.events[key].start = 1;
+              });
+            } else if (result.start == 1 && event.name == steps[1]){
+              result.complete = 1;
+              _.each(result.events, function(output, key){
+                result.events[key].complete = 1;
+              });
+            } else if (event.name != steps[1] && result.complete === 0) {
+              if (result.start === 0){
+                result.events[event.name] = {};
+                result.events[event.name].start = 0;
+              } else {
+                result.events[event.name] = {};
+                result.events[event.name].start = 1;
+              }
+            }
+          });
+          return result;
+        })
+        .map(function(user){
+            return user.value;
+          })
+        .reduce(mixpanel.reducer.object_merge())
+        .map(function(item){
+          var result = {"Overall Conversion":((item.complete / item.start)*100).toFixed(2), "Best Events":{}, "Worst Events":{}};
+          var event_conversions = {};
+          for (var event in item.events) {
+            if (item.events[event].complete){
+              event_conversions[event] = parseFloat(((item.events[event].complete / item.events[event].start)*100).toFixed(2));
+            }
+          }
+          for (var i=0; i < amount_returned; i++){
+            min = _.invert(event_conversions)[_.min(event_conversions)];
+            max = _.invert(event_conversions)[_.max(event_conversions)];
+            result["Best Events"][max] = event_conversions[max];
+            result["Worst Events"][min] = event_conversions[min];
+            delete event_conversions[max];
+            delete event_conversions[min];
+          }
+          return result;
+        });
+      }
     </script>
   </body>
 </html>
