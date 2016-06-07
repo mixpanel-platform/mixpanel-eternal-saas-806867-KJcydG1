@@ -28,9 +28,10 @@
       .input-section {
         position: relative;
         display: inline-block;
+        vertical-align: top;
       }
-      .input-section.dates {
-        
+      .input-section.events {
+        width: 60%;
       }
       .input {
         position: relative;
@@ -42,6 +43,12 @@
         font-size: 15px;
         font-weight: bold;
         margin-right: 10px;
+      }
+      .input-section.events .dropdown.label {
+        vertical-align: -8px;
+      }
+      .input-section.dates .dropdown-label {
+        vertical-align: 13px;
       }
       #event1, #event2 {
         position: absolute;
@@ -56,33 +63,39 @@
         display: none;
       }
       .overall-conversion {
-        font-size: 20px;
+        font-size: 24px;
         font-weight: bold;
       }
       .overall-title {
-        width: 70%;
+        width: 700px;
         display: inline-block;
       }
       .conversion {
-        width: 25%;
         display: inline-block;
       }
       .event-group {
         margin: 20px 0;
       }
       .event-group-title {
-        font-size: 18px;
+        font-size: 20px;
+      }
+      .event-group-table {
+        margin: 10px 0;
       }
       .event .label {
-        width: 20%;
+        width: 150px;
         display: inline-block;
       }
       .event .event-name {
-        width: 30%;
+        width: 400px;
         display: inline-block;
       }
+      .event .event-name, .event .conversion {
+        font-size: 16px;
+        font-weight: bold;
+      }
       .cell {
-        padding: 3px;
+        padding: 3px 3px 3px 0;
       }
     </style>
     
