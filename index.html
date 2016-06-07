@@ -26,8 +26,11 @@
         margin-bottom: 20px;
       }
       .input-section {
+        position: relative;
         display: inline-block;
-        width: 50%;
+      }
+      .input-section.dates {
+        
       }
       .input {
         position: relative;
@@ -44,7 +47,7 @@
         position: absolute;
         left: 150px;
       }
-      #event2 {
+      .input.event2 {
         margin-top: 30px;
       }
       
@@ -84,18 +87,18 @@
     </style>
     
     <div class="inputs">
-      <div class="input-section">
-        <div class="input">
+      <div class="input-section events">
+        <div class="input event1">
           <div class="dropdown-label">Start Event:</div>
           <div class="dropdown" id="event1"></div>
         </div>
-        <div class="input">
+        <div class="input event2">
           <div class="dropdown-label">Conversion Event:</div>
           <div class="dropdown" id="event2"></div>
         </div>
       </div>
-      <div class="input-section">
-        <div class="input">
+      <div class="input-section dates">
+        <div class="input dates">
           <div class="dropdown-label">Date Range:</div>
           <div class="dropdown" id="dates"></div>
         </div>
