@@ -50,7 +50,7 @@
           }
           
           // run JQL query
-          MP.api.JQL(script, params).done(function(results) {
+          MP.api.jql(script, params).done(function(results) {
             console.log(results);
             addMainConversion(event1, event2, results[0]['Overall Conversion']);
             addEventGroup($('#best-events'), 'Best', results[0]['Best Events']);
