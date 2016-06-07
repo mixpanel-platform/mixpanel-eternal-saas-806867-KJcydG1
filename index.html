@@ -49,6 +49,7 @@
       }
       .event-group-title {
         font-size: 18px;
+        display: none;
       }
       .event .label {
         width: 20%;
@@ -118,7 +119,9 @@
           
           // run JQL query
           MP.api.jql(script, params).done(function(results) {
-            console.log(results);
+            // unhide titles if hidden
+            $('.event-group-title').show();
+            // add data to report
             addMainConversion(event1, event2, results[0]['Overall Conversion']);
             addEventGroup($('#best-events'), 'Best', results[0]['Best Events']);
             addEventGroup($('#worst-events'), 'Worst', results[0]['Worst Events']);
@@ -133,8 +136,11 @@
         }
         
         function addEventGroup($div, groupType, data) {
-          // add conversion rates for each event in group
           var $table = $div.find('.event-group-table');
+          // reset table
+          $table.html('');
+          
+          // add conversion rates for each event in group to table
           _.each(data, function(conversion, eventName) {
             $('<div class="event">' + 
                 '<div class="label">When users completed</div>' + 
