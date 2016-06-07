@@ -4,17 +4,79 @@
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="https://cdn.mxpnl.com/libs/mixpanel-platform/css/reset.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.mxpnl.com/libs/mixpanel-platform/build/mixpanel-platform.v0.latest.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic' rel='stylesheet' type='text/css'>
     <script src="https://cdn.mxpnl.com/libs/mixpanel-platform/build/mixpanel-platform.v0.latest.min.js"></script>
   </head>
-  <body class="mixpanel-platform-body">
+  <body>
+    <style>
+      /* overall */
+      body {
+        font-family: 'Source-Sans-Pro', sans-serif;
+        font-size: 13px;
+        color: #434e5b;
+        padding: 20px;
+      }
+      .inputs, .results {
+        background-color: white;
+        border: 10px solid #eff1f6;
+        padding: 20px;
+      }
+      /* inputs */
+      .inputs {
+        margin-bottom: 20px;
+      }
+      .input {
+        display: inline-block;
+      }
+      .dropdown-label, .dropdown {
+        display: inline-block;
+      }
+      /* results */
+      .overall-conversion {
+        font-size: 20px;
+        font-weight: bold;
+      }
+      .overall-title {
+        width: 70%;
+        display: inline-block;
+      }
+      .conversion {
+        width: 25%;
+        display: inline-block;
+      }
+      .event-group {
+        margin: 20px 0;
+      }
+      .event-group-title {
+        font-size: 18px;
+      }
+      .event .label {
+        width: 20%;
+        display: inline-block;
+      }
+      .event .event-name {
+        width: 30%;
+        display: inline-block;
+      }
+    </style>
+    
     <div class="inputs">
-      <div id="dates"></div>
-      <div id="event1"></div>
-      <div id="event2"></div>
+      <div class="input">
+        <div class="dropdown-label">Start Event:</div>
+        <div class="dropdown" id="event1"></div>
+      </div>
+      <div class="input">
+        <div class="dropdown-label">Conversion Event:</div>
+        <div class="dropdown" id="event2"></div>
+      </div>
+      <div class="input">
+        <div class="dropdown-label">Date Range:</div>
+        <div class="dropdown" id="dates"></div>
+      </div>
     </div>
     <div class="results">
       <div class="overall-conversion">
-        <div class="title"></div>
+        <div class="overall-title"></div>
         <div class="conversion main-conversion"></div>
       </div>
       <div class="event-group" id="best-events">
@@ -66,8 +128,8 @@
         function addMainConversion(event1, event2, data) {
           // add overall conversion data
           var $conv = $('.overall-conversion');
-          $conv.find('.title').text(event1 + ' to ' + event2 + ' Conversion');
-          $conv.find('.conversion').text(data);
+          $conv.find('.overall-title').text(event1 + ' to ' + event2 + ' Conversion');
+          $conv.find('.conversion').text(data + '%');
         }
         
         function addEventGroup($div, groupType, data) {
@@ -78,7 +140,7 @@
                 '<div class="label">When users completed</div>' + 
                 '<div class="event-name">' + eventName + '</div>' +
                 '<div class="label">conversion rate was</div>' +
-                '<div class="conversion">' + conversion + '</div>' +
+                '<div class="conversion">' + conversion + '%</div>' +
               '</div>')
               .appendTo($table);
           });
